@@ -252,24 +252,34 @@ function readValue(key, raw) {
 }
 
 /**
- * A source's front matter and body, or its refusal reason. The body is sliced
- * out of the text, never split and re-joined; only the header lines are walked.
+ * A source's front matter and body, or its refusal reason. The closing "---"
+ * is found first: an unclosed header is refused as unclosed whatever its
+ * lines hold. The body is sliced out of the text, never split and re-joined.
  */
 function parseHeader(text) {
   const firstBreak = text.indexOf('\n');
   const first = firstBreak === -1 ? text : text.slice(0, firstBreak);
   if (first !== '---') return { error: 'no front matter' };
   if (firstBreak === -1) return { error: 'the front matter is not closed' };
+  let closeStart = -1;
+  let at = firstBreak;
+  for (;;) {
+    const hit = text.indexOf('\n---', at);
+    if (hit === -1) break;
+    const after = hit + 4;
+    if (after === text.length || text.charCodeAt(after) === 10) {
+      closeStart = hit + 1;
+      break;
+    }
+    at = hit + 1;
+  }
+  if (closeStart === -1) return { error: 'the front matter is not closed' };
   const data = {};
   let start = firstBreak + 1;
   let lineNo = 2;
-  for (;;) {
+  while (start < closeStart) {
     const br = text.indexOf('\n', start);
-    const line = br === -1 ? text.slice(start) : text.slice(start, br);
-    if (line === '---') {
-      if (!Object.hasOwn(data, 'title')) return { error: 'no title' };
-      return { data, body: br === -1 ? '' : text.slice(br + 1) };
-    }
+    const line = text.slice(start, br);
     let blank = true;
     for (let i = 0; i < line.length; i++) {
       const c = line.charCodeAt(i);
@@ -299,10 +309,12 @@ function parseHeader(text) {
       if (typeof v === 'string') return { error: v };
       data[key] = v.value;
     }
-    if (br === -1) return { error: 'the front matter is not closed' };
     start = br + 1;
     lineNo++;
   }
+  if (!Object.hasOwn(data, 'title')) return { error: 'no title' };
+  const bodyAt = closeStart + 3;
+  return { data, body: bodyAt === text.length ? '' : text.slice(bodyAt + 1) };
 }
 
 // ---------------------------------------------------------------- Markdown
