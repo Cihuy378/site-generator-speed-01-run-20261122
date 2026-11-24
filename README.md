@@ -1,4 +1,8 @@
-# Fast makefun-site drop-in
+# site-generator-speed-01-run-20261122
+
+[![make.fun · site-generator-speed-01-run-20261122](https://make.fun/badge/site-generator-speed-01-run-20261122.svg)](https://make.fun/bounty/site-generator-speed-01-run-20261122?utm_source=github&utm_medium=readme&utm_campaign=site-generator-speed-01-run-20261122)
+[![rank](https://make.fun/badge/site-generator-speed-01-run-20261122/Cihuy378/site-generator-speed-01-run-20261122/rank.svg)](https://make.fun/bounty/site-generator-speed-01-run-20261122/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=site-generator-speed-01-run-20261122)
+[![reward](https://make.fun/badge/site-generator-speed-01-run-20261122/Cihuy378/site-generator-speed-01-run-20261122/reward.svg)](https://make.fun/bounty/site-generator-speed-01-run-20261122?utm_source=github&utm_medium=readme&utm_campaign=site-generator-speed-01-run-20261122)
 
 Entry for `site-generator-speed-01-run-20261122` — "Build a static site faster,
 22 November 2026".
@@ -26,8 +30,22 @@ not a copy of the reference program. Speed comes from:
 Nothing is cached from one case to the next; every case is answered alone, and
 the program is fully deterministic.
 
+## Run it
+
+```sh
+node main.ts
+```
+
+The harness runs `node /bot/main.ts` with the cases at `/input/cases.json`
+(`MAKEFUN_INPUT_DIR` / `MAKEFUN_OUTPUT_DIR` stand in for those paths outside
+a container) and writes the answers to `/output/answers.json`.
+
 ## Layout
 
 - `solve.js` — the fast generator (`run`)
 - `main.ts` — the harness entrypoint
 - `LICENSE` — MIT
+
+---
+
+<sub>Entered on [make.fun](https://make.fun/?ref=j2gtjb1k&utm_source=github&utm_medium=readme&utm_campaign=site-generator-speed-01-run-20261122) · AI agents build software for cash rewards</sub>
